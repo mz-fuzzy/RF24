@@ -15,7 +15,7 @@
 #ifndef __RF24_H__
 #define __RF24_H__
 
-#include "RF24_config.h"
+#include <RF24_config.h>
 #if ( defined (__linux) || defined (LINUX) ) && defined( __arm__ )
   #include "RPi/bcm2835.h"
 #elif LITTLEWIRE
@@ -112,7 +112,7 @@ public:
    * Call this in setup(), before calling any other methods.
    * @code radio.begin() @endcode
    */
-  void begin(void);
+  VIRTUAL void begin(void);
 
   /**
    * Start listening on the pipes opened for reading.
@@ -129,7 +129,7 @@ public:
    * radio.startListening();
    * @endcode
    */
-  void startListening(void);
+  VIRTUAL void startListening(void);
 
   /**
    * Stop listening for incoming messages, and switch to transmit mode.
@@ -140,7 +140,7 @@ public:
    * radio.write(&data,sizeof(data));
    * @endcode
    */
-  void stopListening(void);
+  VIRTUAL void stopListening(void);
 
   /**
    * Check whether there are bytes available to be read
@@ -151,7 +151,7 @@ public:
    * @endcode
    * @return True if there is a payload available, false if none is
    */
-  bool available(void);
+  VIRTUAL bool available(void);
 
   /**
    * Read the available payload
@@ -175,7 +175,7 @@ public:
    * @endcode
    * @return No return value. Use available().
    */
-  void read( void* buf, uint8_t len );
+  VIRTUAL void read( void* buf, uint8_t len );
 
   /**
    * Be sure to call openWritingPipe() first to set the destination
@@ -200,7 +200,7 @@ public:
    * @endcode
    * @return True if the payload was delivered successfully false if not
    */
-  bool write( const void* buf, uint8_t len );
+  VIRTUAL bool write( const void* buf, uint8_t len );
 
   /**
    * New: Open a pipe for writing via byte array. Old addressing format retained
@@ -227,7 +227,7 @@ s   *
    * addresses amongst nodes on the network.
    */
 
-  void openWritingPipe(const uint8_t *address);
+  VIRTUAL void openWritingPipe(const uint8_t *address);
 
   /**
    * Open a pipe for reading
@@ -257,7 +257,7 @@ s   *
    * @param address The 24, 32 or 40 bit address of the pipe to open.
    */
 
-  void openReadingPipe(uint8_t number, const uint8_t *address);
+  VIRTUAL void openReadingPipe(uint8_t number, const uint8_t *address);
 
    /**@}*/
   /**
@@ -281,7 +281,7 @@ s   *
    * }
    * @endcode
    */
-  void printDetails(void);
+  VIRTUAL void printDetails(void);
 
   /**
    * Test whether there are bytes available to be read in the
@@ -299,13 +299,13 @@ s   *
    * @endcode
    * @return True if there is a payload available, false if none is
    */
-  bool available(uint8_t* pipe_num);
+  VIRTUAL bool available(uint8_t* pipe_num);
 
   /**
    * Check if the radio needs to be read. Can be used to prevent data loss
    * @return True if all three 32-byte radio buffers are full
    */
-  bool rxFifoFull();
+  VIRTUAL bool rxFifoFull();
 
   /**
    * Enter low-power mode
@@ -324,7 +324,7 @@ s   *
    * radio.powerUp();
    * @endcode
    */
-  void powerDown(void);
+  VIRTUAL void powerDown(void);
 
   /**
    * Leave low-power mode - required for normal radio operation after calling powerDown()
@@ -332,7 +332,7 @@ s   *
    * To return to low power mode, call powerDown().
    * @note This will take up to 5ms for maximum compatibility 
    */
-  void powerUp(void) ;
+  VIRTUAL void powerUp(void) ;
 
   /**
   * Write for single NOACK writes. Optionally disables acknowledgements/autoretries for a single write.
@@ -348,7 +348,7 @@ s   *
   * @param len Number of bytes to be sent
   * @param multicast Request ACK (0), NOACK (1)
   */
-  bool write( const void* buf, uint8_t len, const bool multicast );
+  VIRTUAL bool write( const void* buf, uint8_t len, const bool multicast );
 
   /**
    * This will not block until the 3 FIFO buffers are filled with data.
@@ -378,7 +378,7 @@ s   *
    * @param len Number of bytes to be sent
    * @return True if the payload was delivered successfully false if not
    */
-  bool writeFast( const void* buf, uint8_t len );
+  VIRTUAL bool writeFast( const void* buf, uint8_t len );
 
   /**
   * WriteFast for single NOACK writes. Disables acknowledgements/autoretries for a single write.
@@ -391,7 +391,7 @@ s   *
   * @param len Number of bytes to be sent
   * @param multicast Request ACK (0) or NOACK (1)
   */
-  bool writeFast( const void* buf, uint8_t len, const bool multicast );
+  VIRTUAL bool writeFast( const void* buf, uint8_t len, const bool multicast );
 
   /**
    * This function extends the auto-retry mechanism to any specified duration.
@@ -419,7 +419,7 @@ s   *
    * @param timeout User defined timeout in milliseconds.
    * @return True if the payload was loaded into the buffer successfully false if not
    */
-  bool writeBlocking( const void* buf, uint8_t len, uint32_t timeout );
+  VIRTUAL bool writeBlocking( const void* buf, uint8_t len, uint32_t timeout );
 
   /**
    * This function should be called as soon as transmission is finished to
@@ -447,7 +447,7 @@ s   *
    * @return True if transmission is successful
    *
    */
-   bool txStandBy();
+   VIRTUAL bool txStandBy();
 
   /**
    * This function allows extended blocking and auto-retries per a user defined timeout
@@ -465,7 +465,7 @@ s   *
    * @return True if transmission is successful
    *
    */
-   bool txStandBy(uint32_t timeout, bool startTx = 0);
+   VIRTUAL bool txStandBy(uint32_t timeout, bool startTx = 0);
 
   /**
    * Write an ack payload for the specified pipe
@@ -483,7 +483,7 @@ s   *
    * @param len Length of the data to send, up to 32 bytes max.  Not affected
    * by the static payload set by setPayloadSize().
    */
-  void writeAckPayload(uint8_t pipe, const void* buf, uint8_t len);
+  VIRTUAL void writeAckPayload(uint8_t pipe, const void* buf, uint8_t len);
 
   /**
    * Enable dynamic ACKs (single write multicast or unicast) for chosen messages
@@ -497,7 +497,7 @@ s   *
    * radio.write(&data,32,0);  // Sends a payload using auto-retry/autoACK
    * @endcode
    */
-  void enableDynamicAck();
+  VIRTUAL void enableDynamicAck();
 
   /**
    * Determine if an ack payload was received in the most recent call to
@@ -507,7 +507,7 @@ s   *
    *
    * @return True if an ack payload is available.
    */
-  bool isAckPayloadAvailable(void);
+  VIRTUAL bool isAckPayloadAvailable(void);
 
   /**
    * Call this when you get an interrupt to find out why
@@ -519,7 +519,7 @@ s   *
    * @param[out] tx_fail The send failed, too many retries (MAX_RT)
    * @param[out] rx_ready There is a message waiting to be read (RX_DS)
    */
-  void whatHappened(bool& tx_ok,bool& tx_fail,bool& rx_ready);
+  VIRTUAL void whatHappened(bool& tx_ok,bool& tx_fail,bool& rx_ready);
 
   /**
    * Non-blocking write to the open writing pipe used for buffered writes
@@ -545,7 +545,7 @@ s   *
    * @param multicast Request ACK (0) or NOACK (1)
    * @return True if the payload was delivered successfully false if not
    */
-  void startFastWrite( const void* buf, uint8_t len, const bool multicast, bool startTx = 1 );
+  VIRTUAL void startFastWrite( const void* buf, uint8_t len, const bool multicast, bool startTx = 1 );
 
   /**
    * Non-blocking write to the open writing pipe
@@ -567,7 +567,7 @@ s   *
    * @param multicast Request ACK (0) or NOACK (1)
    *
    */
-  void startWrite( const void* buf, uint8_t len, const bool multicast );
+  VIRTUAL void startWrite( const void* buf, uint8_t len, const bool multicast );
   
   /**
    * This function is mainly used internally to take advantage of the auto payload
@@ -584,7 +584,7 @@ s   *
    * After issuing reUseTX(), it will keep reending the same payload forever or until
    * a payload is written to the FIFO, or a flush_tx command is given.
    */
-   void reUseTX();
+   VIRTUAL void reUseTX();
 
   /**
    * Empty the transmit buffer. This is generally not required in standard operation.
@@ -592,7 +592,7 @@ s   *
    *
    * @return Current value of status register
    */
-  uint8_t flush_tx(void);
+  VIRTUAL uint8_t flush_tx(void);
 
   /**
    * Test whether there was a carrier on the line for the
@@ -602,7 +602,7 @@ s   *
    *
    * @return true if was carrier, false if not
    */
-  bool testCarrier(void);
+  VIRTUAL bool testCarrier(void);
 
   /**
    * Test whether a signal (carrier or otherwise) greater than
@@ -621,7 +621,7 @@ s   *
    * @endcode
    * @return true if signal => -64dBm, false if not
    */
-  bool testRPD(void) ;
+  VIRTUAL bool testRPD(void) ;
 
   /**
    * Test whether this is a real radio, or a mock shim for
@@ -630,7 +630,7 @@ s   *
    *
    * @return true if this is a legitimate radio
    */
-  bool isValid() { return ce_pin != 0xff && csn_pin != 0xff; }
+  VIRTUAL bool isValid() { return ce_pin != 0xff && csn_pin != 0xff; }
 
   /**
   * The radio will generate interrupt signals when a transmission is complete,
@@ -648,7 +648,7 @@ s   *
   * @param tx_fail  Mask transmit failure interrupts
   * @param rx_ready Mask payload received interrupts
   */
-  void maskIRQ(bool tx_ok,bool tx_fail,bool rx_ready);
+  VIRTUAL void maskIRQ(bool tx_ok,bool tx_fail,bool rx_ready);
   
   /**
   * Set the address width from 3 to 5 bytes (24, 32 or 40 bit)
@@ -656,7 +656,7 @@ s   *
   * @param a_width The address width to use: 3,4 or 5
   */
 
-  void setAddressWidth(uint8_t a_width);
+  VIRTUAL void setAddressWidth(uint8_t a_width);
 
   
    /**
@@ -664,7 +664,7 @@ s   *
    * Can be safely called without having previously opened a pipe.
    * @param pipe Which pipe # to close, 0-5.
    */
-  void closeReadingPipe( uint8_t pipe ) ;
+  VIRTUAL void closeReadingPipe( uint8_t pipe ) ;
   
   /**@}*/
 
@@ -685,14 +685,14 @@ s   *
    * max is 15.  0 means 250us, 15 means 4000us.
    * @param count How many retries before giving up, max 15
    */
-  void setRetries(uint8_t delay, uint8_t count);
+  VIRTUAL void setRetries(uint8_t delay, uint8_t count);
 
   /**
    * Set RF communication channel
    *
    * @param channel Which RF channel to communicate on, 0-127
    */
-  void setChannel(uint8_t channel);
+  VIRTUAL void setChannel(uint8_t channel);
 
   /**
    * Set Static Payload Size
@@ -706,7 +706,7 @@ s   *
    *
    * @param size The number of bytes in the payload
    */
-  void setPayloadSize(uint8_t size);
+  VIRTUAL void setPayloadSize(uint8_t size);
 
   /**
    * Get Static Payload Size
@@ -715,7 +715,7 @@ s   *
    *
    * @return The number of bytes in the payload
    */
-  uint8_t getPayloadSize(void);
+  VIRTUAL uint8_t getPayloadSize(void);
 
   /**
    * Get Dynamic Payload Size
@@ -737,7 +737,7 @@ s   *
    *
    * @return Payload length of last-received dynamic payload
    */
-  uint8_t getDynamicPayloadSize(void);
+  VIRTUAL uint8_t getDynamicPayloadSize(void);
 
   /**
    * Enable custom payloads on the acknowledge packets
@@ -746,7 +746,7 @@ s   *
    * manually changing the radio modes on both units.
    *
    */
-  void enableAckPayload(void);
+  VIRTUAL void enableAckPayload(void);
 
   /**
    * Enable dynamically-sized payloads
@@ -755,7 +755,7 @@ s   *
    * once in a while.  This enables dynamic payloads on ALL pipes.
    *
    */
-  void enableDynamicPayloads(void);
+  VIRTUAL void enableDynamicPayloads(void);
 
   /**
    * Determine whether the hardware is an nRF24L01+ or not.
@@ -763,7 +763,7 @@ s   *
    * @return true if the hardware is nRF24L01+ (or compatible) and false
    * if its not.
    */
-  bool isPVariant(void) ;
+  VIRTUAL bool isPVariant(void) ;
 
   /**
    * Enable or disable auto-acknowlede packets
@@ -773,7 +773,7 @@ s   *
    *
    * @param enable Whether to enable (true) or disable (false) auto-acks
    */
-  void setAutoAck(bool enable);
+  VIRTUAL void setAutoAck(bool enable);
 
   /**
    * Enable or disable auto-acknowlede packets on a per pipeline basis.
@@ -784,7 +784,7 @@ s   *
    * @param pipe Which pipeline to modify
    * @param enable Whether to enable (true) or disable (false) auto-acks
    */
-  void setAutoAck( uint8_t pipe, bool enable ) ;
+  VIRTUAL void setAutoAck( uint8_t pipe, bool enable ) ;
 
   /**
    * Set Power Amplifier (PA) level to one of four levels:
@@ -797,7 +797,7 @@ s   *
    *
    * @param level Desired PA level.
    */
-  void setPALevel ( uint8_t level );
+  VIRTUAL void setPALevel ( uint8_t level );
 
   /**
    * Fetches the current PA level.
@@ -807,7 +807,7 @@ s   *
    *
    * @return Returns values 0 to 3 representing the PA Level.
    */
-   uint8_t getPALevel( void );
+   VIRTUAL uint8_t getPALevel( void );
 
   /**
    * Set the transmission data rate
@@ -817,7 +817,7 @@ s   *
    * @param speed RF24_250KBPS for 250kbs, RF24_1MBPS for 1Mbps, or RF24_2MBPS for 2Mbps
    * @return true if the change was successful
    */
-  bool setDataRate(rf24_datarate_e speed);
+  VIRTUAL bool setDataRate(rf24_datarate_e speed);
 
   /**
    * Fetches the transmission data rate
@@ -826,28 +826,28 @@ s   *
    * is one of 250kbs, RF24_1MBPS for 1Mbps, or RF24_2MBPS, as defined in the
    * rf24_datarate_e enum.
    */
-  rf24_datarate_e getDataRate( void ) ;
+  VIRTUAL rf24_datarate_e getDataRate( void ) ;
 
   /**
    * Set the CRC length
    *
    * @param length RF24_CRC_8 for 8-bit or RF24_CRC_16 for 16-bit
    */
-  void setCRCLength(rf24_crclength_e length);
+  VIRTUAL void setCRCLength(rf24_crclength_e length);
 
   /**
    * Get the CRC length
    *
    * @return RF24_DISABLED if disabled or RF24_CRC_8 for 8-bit or RF24_CRC_16 for 16-bit
    */
-  rf24_crclength_e getCRCLength(void);
+  VIRTUAL rf24_crclength_e getCRCLength(void);
 
   /**
    * Disable CRC validation
    *
    * @warning CRC cannot be disabled if auto-ack/ESB is enabled.
    */
-  void disableCRC( void ) ;
+  VIRTUAL void disableCRC( void ) ;
   
    /**
    * Enable error detection by un-commenting #define FAILURE_HANDLING in RF24_config.h
@@ -901,7 +901,7 @@ s   *
    * @param number Which pipe# to open, 0-5.
    * @param address The 40-bit address of the pipe to open.
    */
-  void openReadingPipe(uint8_t number, uint64_t address);
+  VIRTUAL void openReadingPipe(uint8_t number, uint64_t address);
 
   /**
    * Open a pipe for writing
@@ -915,7 +915,7 @@ s   *
    *
    * @param address The 40-bit address of the pipe to open.
    */
-  void openWritingPipe(uint64_t address);
+  VIRTUAL void openWritingPipe(uint64_t address);
 
 private:
 
