@@ -25,6 +25,7 @@
   /**********************/
   #define rf24_max(a,b) (a>b?a:b)
   #define rf24_min(a,b) (a<b?a:b)
+  #define VIRTUAL
   
 #if ( ( defined (__linux) || defined (linux) ) && defined( __arm__ ) || defined(LITTLEWIRE) )
   
