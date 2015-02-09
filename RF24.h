@@ -1019,7 +1019,7 @@ protected:
    *
    * @return Current value of status register
    */
-  uint8_t get_status(void);
+  VIRTUAL uint8_t get_status(void);
 
   #if !defined (MINIMAL)
   /**
